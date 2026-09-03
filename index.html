@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Inspanner Academy | Python, Java & Data Analytics Training</title>
 
     <meta name="description" content="Inspanner Academy provides professional software training in Python, Java and Data Analytics. Learn industry-ready skills with practical training and career guidance.">
@@ -18,6 +19,7 @@
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --secondary: #7c3aed;
+            --cyan: #06b6d4;
             --dark: #0f172a;
             --dark-2: #1e293b;
             --text: #334155;
@@ -26,8 +28,8 @@
             --white: #ffffff;
             --border: #e2e8f0;
             --success: #16a34a;
-            --gradient: linear-gradient(135deg, #2563eb, #7c3aed);
-            --shadow: 0 20px 50px rgba(15, 23, 42, 0.10);
+            --gradient: linear-gradient( 135deg, #2563eb, #7c3aed, #06b6d4);
+            --shadow: 0 25px 70px rgba(15, 23, 42, .12);
         }
         
         * {
@@ -43,7 +45,7 @@
         body {
             font-family: "Inter", sans-serif;
             color: var(--text);
-            background: var(--white);
+            background: white;
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -53,26 +55,47 @@
             color: inherit;
         }
         
-        img {
-            max-width: 100%;
-            display: block;
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
         }
         
         .container {
             width: min(1150px, calc(100% - 40px));
             margin: auto;
         }
-        /* =========================
-       NAVBAR
-    ========================= */
+        /* =====================================
+           CURSOR GLOW
+        ===================================== */
+        
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient( circle, rgba(37, 99, 235, .10), transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+        /* =====================================
+           NAVBAR
+        ===================================== */
         
         .navbar {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, .82);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(226, 232, 240, .8);
+            transition: .3s;
+        }
+        
+        .navbar.scrolled {
+            box-shadow: 0 10px 35px rgba(15, 23, 42, .08);
         }
         
         .nav-inner {
@@ -88,24 +111,55 @@
             font-size: 22px;
             font-weight: 800;
             color: var(--dark);
-            white-space: nowrap;
+            position: relative;
         }
         
         .logo span {
             color: var(--primary);
         }
         
+        .logo::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: .3s;
+        }
+        
+        .logo:hover::after {
+            width: 100%;
+        }
+        
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 28px;
+            gap: 27px;
             font-size: 14px;
             font-weight: 600;
         }
         
         .nav-links a {
+            position: relative;
             color: var(--text);
-            transition: .2s;
+        }
+        
+        .nav-links a:not(.nav-btn)::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -8px;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transform: translateX(-50%);
+            transition: .25s;
+        }
+        
+        .nav-links a:not(.nav-btn):hover::after {
+            width: 100%;
         }
         
         .nav-links a:hover {
@@ -116,59 +170,151 @@
             background: var(--gradient);
             color: white !important;
             padding: 10px 18px;
-            border-radius: 8px;
+            border-radius: 9px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, .22);
+            transition: .25s;
         }
-        /* =========================
-       HERO
-    ========================= */
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, .32);
+        }
+        /* MOBILE MENU */
+        
+        .menu-toggle {
+            display: none;
+            width: 43px;
+            height: 43px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            margin: 4px auto;
+            background: var(--dark);
+            transition: .3s;
+        }
+        /* =====================================
+           HERO
+        ===================================== */
         
         .hero {
-            background: radial-gradient(circle at 85% 20%, rgba(124, 58, 237, .16), transparent 28%), radial-gradient(circle at 10% 80%, rgba(37, 99, 235, .12), transparent 30%), var(--light);
-            padding: 95px 0 90px;
+            position: relative;
+            overflow: hidden;
+            padding: 105px 0 95px;
+            background: radial-gradient( circle at 85% 15%, rgba(124, 58, 237, .18), transparent 28%), radial-gradient( circle at 10% 80%, rgba(37, 99, 235, .15), transparent 30%), var(--light);
+        }
+        /* floating background blobs */
+        
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            pointer-events: none;
+        }
+        
+        .hero::before {
+            width: 280px;
+            height: 280px;
+            background: rgba(37, 99, 235, .08);
+            top: 10%;
+            left: -100px;
+            animation: floatBlob 8s ease-in-out infinite;
+        }
+        
+        .hero::after {
+            width: 220px;
+            height: 220px;
+            background: rgba(124, 58, 237, .08);
+            right: -80px;
+            bottom: 5%;
+            animation: floatBlob 10s ease-in-out infinite reverse;
+        }
+        
+        @keyframes floatBlob {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(30px, -25px);
+            }
         }
         
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.1fr .9fr;
+            grid-template-columns: 1.05fr .95fr;
             align-items: center;
             gap: 70px;
+            position: relative;
+            z-index: 2;
         }
         
         .badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #eff6ff;
+            background: rgba(239, 246, 255, .85);
             color: var(--primary);
             border: 1px solid #dbeafe;
-            padding: 7px 13px;
+            padding: 8px 14px;
             border-radius: 30px;
             font-size: 12px;
             font-weight: 700;
             margin-bottom: 20px;
+            animation: badgePulse 3s infinite;
         }
         
         .badge::before {
             content: "";
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--success);
+            box-shadow: 0 0 0 5px rgba(22, 163, 74, .12);
+            animation: livePulse 1.8s infinite;
+        }
+        
+        @keyframes livePulse {
+            50% {
+                box-shadow: 0 0 0 10px rgba(22, 163, 74, 0);
+            }
+        }
+        
+        @keyframes badgePulse {
+            50% {
+                transform: translateY(-2px);
+            }
         }
         
         .hero h1 {
             font-family: "Poppins", sans-serif;
-            font-size: clamp(38px, 5vw, 64px);
-            line-height: 1.08;
+            font-size: clamp(40px, 5vw, 66px);
+            line-height: 1.07;
             color: var(--dark);
             margin-bottom: 22px;
-            letter-spacing: -2px;
+            letter-spacing: -2.5px;
         }
         
         .hero h1 span {
-            background: var(--gradient);
+            background: linear-gradient( 90deg, #2563eb, #7c3aed, #06b6d4, #2563eb);
+            background-size: 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradientMove 5s linear infinite;
+        }
+        
+        @keyframes gradientMove {
+            to {
+                background-position: 300%;
+            }
         }
         
         .hero-text {
@@ -176,6 +322,11 @@
             color: var(--muted);
             max-width: 620px;
             margin-bottom: 30px;
+        }
+        
+        .typing {
+            color: var(--primary);
+            font-weight: 700;
         }
         
         .hero-buttons {
@@ -189,40 +340,96 @@
             align-items: center;
             justify-content: center;
             padding: 13px 22px;
-            border-radius: 8px;
+            border-radius: 9px;
             font-weight: 700;
             font-size: 14px;
-            transition: .2s;
+            transition: .25s;
+            cursor: pointer;
         }
         
         .btn-primary {
             background: var(--gradient);
             color: white;
-            box-shadow: 0 10px 25px rgba(37, 99, 235, .20);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, .25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 150%;
+            background: rgba(255, 255, 255, .2);
+            transform: rotate(25deg);
+            left: -100px;
+            transition: .5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 120%;
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
         
         .btn-outline {
             border: 1px solid var(--border);
-            background: white;
+            background: rgba(255, 255, 255, .8);
             color: var(--dark);
         }
         
         .btn-outline:hover {
             border-color: var(--primary);
             color: var(--primary);
+            transform: translateY(-3px);
         }
-        /* Hero visual */
+        /* =====================================
+           HERO CODE CARD
+        ===================================== */
         
         .hero-card {
-            background: var(--dark);
-            border-radius: 20px;
+            background: linear-gradient( 145deg, #0f172a, #172033);
+            border-radius: 22px;
             padding: 28px;
-            box-shadow: 0 30px 70px rgba(15, 23, 42, .25);
+            box-shadow: 0 35px 90px rgba(15, 23, 42, .30);
             position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform .2s ease;
+        }
+        
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, .18);
+            filter: blur(30px);
+            right: -50px;
+            top: -50px;
+        }
+        
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient( 90deg, transparent, #60a5fa, #a78bfa, transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(100%);
+            }
         }
         
         .window-top {
@@ -254,6 +461,8 @@
             color: #cbd5e1;
             font-size: 14px;
             line-height: 2;
+            position: relative;
+            z-index: 2;
         }
         
         .code .purple {
@@ -272,18 +481,73 @@
             color: #facc15;
         }
         
+        .code-line {
+            opacity: 0;
+            transform: translateX(-15px);
+            animation: codeAppear .6s forwards;
+        }
+        
+        .code-line:nth-child(1) {
+            animation-delay: .2s;
+        }
+        
+        .code-line:nth-child(2) {
+            animation-delay: .4s;
+        }
+        
+        .code-line:nth-child(3) {
+            animation-delay: .6s;
+        }
+        
+        .code-line:nth-child(4) {
+            animation-delay: .8s;
+        }
+        
+        .code-line:nth-child(5) {
+            animation-delay: 1s;
+        }
+        
+        .code-line:nth-child(6) {
+            animation-delay: 1.2s;
+        }
+        
+        .code-line:nth-child(7) {
+            animation-delay: 1.4s;
+        }
+        
+        .code-line:nth-child(8) {
+            animation-delay: 1.6s;
+        }
+        
+        @keyframes codeAppear {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
         .stats-card {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-top: 25px;
+            position: relative;
+            z-index: 2;
         }
         
         .stat {
-            background: #1e293b;
+            background: rgba(30, 41, 59, .85);
+            border: 1px solid rgba(255, 255, 255, .08);
             padding: 15px 10px;
             text-align: center;
             border-radius: 10px;
+            transition: .25s;
+        }
+        
+        .stat:hover {
+            transform: translateY(-5px);
+            background: rgba(37, 99, 235, .16);
+            border-color: rgba(96, 165, 250, .3);
         }
         
         .stat strong {
@@ -296,9 +560,9 @@
             color: #94a3b8;
             font-size: 10px;
         }
-        /* =========================
-       TRUST BAR
-    ========================= */
+        /* =====================================
+           TRUST
+        ===================================== */
         
         .trust {
             border-bottom: 1px solid var(--border);
@@ -314,6 +578,11 @@
         .trust-item {
             padding: 25px 15px;
             border-right: 1px solid var(--border);
+            transition: .3s;
+        }
+        
+        .trust-item:hover {
+            background: #f8fafc;
         }
         
         .trust-item:last-child {
@@ -330,18 +599,18 @@
             color: var(--muted);
             font-size: 12px;
         }
-        /* =========================
-       SECTIONS
-    ========================= */
+        /* =====================================
+           SECTIONS
+        ===================================== */
         
         section {
-            padding: 90px 0;
+            padding: 95px 0;
         }
         
         .section-heading {
             text-align: center;
             max-width: 680px;
-            margin: 0 auto 50px;
+            margin: 0 auto 55px;
         }
         
         .section-heading .label {
@@ -365,12 +634,26 @@
             color: var(--muted);
             font-size: 15px;
         }
-        /* =========================
-       COURSES
-    ========================= */
+        /* =====================================
+           SCROLL REVEAL
+        ===================================== */
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* =====================================
+           COURSES
+        ===================================== */
         
         .courses {
-            background: var(--light);
+            background: radial-gradient( circle at 10% 20%, rgba(37, 99, 235, .06), transparent 25%), var(--light);
         }
         
         .course-grid {
@@ -382,26 +665,50 @@
         .course-card {
             background: white;
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 28px;
-            transition: .25s;
+            border-radius: 16px;
+            padding: 30px;
+            transition: transform .35s, box-shadow .35s, border-color .35s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .course-card::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            left: 0;
+            top: 0;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: .35s;
+        }
+        
+        .course-card:hover::before {
+            transform: scaleX(1);
         }
         
         .course-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(15, 23, 42, .12);
             border-color: #bfdbfe;
         }
         
         .course-icon {
-            width: 52px;
-            height: 52px;
+            width: 55px;
+            height: 55px;
             display: grid;
             place-items: center;
-            border-radius: 12px;
+            border-radius: 14px;
             background: #eff6ff;
-            font-size: 25px;
+            font-size: 26px;
             margin-bottom: 20px;
+            transition: .3s;
+        }
+        
+        .course-card:hover .course-icon {
+            transform: rotate(-8deg) scale(1.08);
         }
         
         .course-card:nth-child(2) .course-icon {
@@ -434,6 +741,11 @@
         .course-list li {
             font-size: 13px;
             color: var(--text);
+            transition: .2s;
+        }
+        
+        .course-card:hover .course-list li {
+            transform: translateX(3px);
         }
         
         .course-list li::before {
@@ -442,9 +754,9 @@
             font-weight: 800;
             margin-right: 8px;
         }
-        /* =========================
-       WHY US
-    ========================= */
+        /* =====================================
+           WHY US
+        ===================================== */
         
         .why-grid {
             display: grid;
@@ -453,10 +765,18 @@
         }
         
         .why-card {
-            padding: 26px;
+            padding: 28px;
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             background: white;
+            transition: .3s;
+            position: relative;
+        }
+        
+        .why-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
+            border-color: #bfdbfe;
         }
         
         .why-number {
@@ -477,13 +797,15 @@
             color: var(--muted);
             font-size: 13px;
         }
-        /* =========================
-       PROCESS
-    ========================= */
+        /* =====================================
+           PROCESS
+        ===================================== */
         
         .process {
-            background: var(--dark);
+            background: radial-gradient( circle at 20% 10%, rgba(37, 99, 235, .15), transparent 25%), var(--dark);
             color: white;
+            position: relative;
+            overflow: hidden;
         }
         
         .process .section-heading h2 {
@@ -502,20 +824,32 @@
         
         .process-card {
             text-align: center;
-            padding: 25px 15px;
+            padding: 28px 15px;
+            transition: .3s;
+        }
+        
+        .process-card:hover {
+            transform: translateY(-8px);
         }
         
         .process-icon {
-            width: 52px;
-            height: 52px;
+            width: 55px;
+            height: 55px;
             display: grid;
             place-items: center;
             margin: 0 auto 18px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, .08);
-            border: 1px solid rgba(255, 255, 255, .15);
+            background: linear-gradient( 135deg, rgba(37, 99, 235, .25), rgba(124, 58, 237, .25));
+            border: 1px solid rgba(255, 255, 255, .18);
             color: #93c5fd;
             font-weight: 800;
+            transition: .3s;
+        }
+        
+        .process-card:hover .process-icon {
+            transform: rotate(360deg) scale(1.12);
+            background: var(--gradient);
+            color: white;
         }
         
         .process-card h3 {
@@ -527,24 +861,38 @@
             color: #94a3b8;
             font-size: 12px;
         }
-        /* =========================
-       CTA
-    ========================= */
+        /* =====================================
+           CTA
+        ===================================== */
         
         .cta {
-            padding: 70px 0;
+            padding: 80px 0;
             background: var(--light);
         }
         
         .cta-box {
-            background: var(--gradient);
+            background: radial-gradient( circle at 90% 20%, rgba(255, 255, 255, .2), transparent 25%), var(--gradient);
             color: white;
-            padding: 55px;
-            border-radius: 20px;
+            padding: 60px;
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(37, 99, 235, .22);
+        }
+        
+        .cta-box::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .15);
+            right: 10%;
+            bottom: -100px;
         }
         
         .cta-box h2 {
@@ -562,10 +910,16 @@
             background: white;
             color: var(--primary);
             white-space: nowrap;
+            position: relative;
+            z-index: 2;
         }
-        /* =========================
-       CONTACT
-    ========================= */
+        
+        .cta-box .btn:hover {
+            transform: translateY(-3px) scale(1.03);
+        }
+        /* =====================================
+           CONTACT
+        ===================================== */
         
         .contact-grid {
             display: grid;
@@ -591,6 +945,11 @@
             display: flex;
             gap: 14px;
             margin-bottom: 18px;
+            transition: .2s;
+        }
+        
+        .contact-item:hover {
+            transform: translateX(5px);
         }
         
         .contact-icon {
@@ -624,8 +983,9 @@
         .contact-form {
             background: var(--light);
             border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 30px;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, .06);
         }
         
         .contact-form h3 {
@@ -651,12 +1011,19 @@
         .form-group textarea {
             width: 100%;
             border: 1px solid var(--border);
-            border-radius: 7px;
+            border-radius: 8px;
             padding: 12px 13px;
-            font-family: inherit;
             font-size: 13px;
             outline: none;
             background: white;
+            transition: .2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, .08);
         }
         
         .form-group textarea {
@@ -664,20 +1031,14 @@
             resize: vertical;
         }
         
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: var(--primary);
-        }
-        
         .submit-btn {
             width: 100%;
             border: none;
             cursor: pointer;
         }
-        /* =========================
-       FOOTER
-    ========================= */
+        /* =====================================
+           FOOTER
+        ===================================== */
         
         footer {
             background: #020617;
@@ -724,10 +1085,12 @@
         .footer-links a {
             color: #94a3b8;
             font-size: 12px;
+            transition: .2s;
         }
         
         .footer-links a:hover {
             color: white;
+            transform: translateX(3px);
         }
         
         .copyright {
@@ -737,17 +1100,71 @@
             color: #64748b;
             font-size: 11px;
         }
-        /* =========================
-       RESPONSIVE
-    ========================= */
+        /* =====================================
+           BACK TO TOP
+        ===================================== */
         
-        @media (max-width: 900px) {
+        .back-top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: .3s;
+            z-index: 999;
+        }
+        
+        .back-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .back-top:hover {
+            transform: translateY(-5px);
+        }
+        /* =====================================
+           TOAST
+        ===================================== */
+        
+        .toast {
+            position: fixed;
+            right: 20px;
+            bottom: 80px;
+            background: #0f172a;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+            transform: translateX(130%);
+            transition: .4s;
+            z-index: 2000;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        /* =====================================
+           RESPONSIVE
+        ===================================== */
+        
+        @media (max-width: 950px) {
             .hero-grid {
                 grid-template-columns: 1fr;
-                gap: 45px;
+                gap: 50px;
             }
             .hero-card {
-                max-width: 650px;
+                max-width: 680px;
                 width: 100%;
                 margin: auto;
             }
@@ -765,21 +1182,57 @@
             }
         }
         
-        @media (max-width: 650px) {
+        @media (max-width: 700px) {
             .container {
                 width: min(100% - 30px, 1150px);
             }
             .nav-inner {
-                min-height: 62px;
+                min-height: 64px;
+            }
+            .menu-toggle {
+                display: block;
             }
             .nav-links {
-                display: none;
+                position: absolute;
+                left: 15px;
+                right: 15px;
+                top: 70px;
+                background: rgba(255, 255, 255, .98);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                box-shadow: 0 20px 50px rgba(15, 23, 42, .12);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: .3s;
+            }
+            .nav-links.open {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+            .nav-links a {
+                padding: 12px;
+                border-radius: 8px;
+            }
+            .nav-links a:hover {
+                background: #f8fafc;
+            }
+            .nav-links .nav-btn {
+                text-align: center;
+                margin-top: 5px;
             }
             .hero {
-                padding: 65px 0;
+                padding: 70px 0;
             }
             .hero h1 {
-                font-size: 39px;
+                font-size: 42px;
                 letter-spacing: -1.5px;
             }
             .hero-text {
@@ -802,7 +1255,7 @@
                 border-bottom: none;
             }
             section {
-                padding: 65px 0;
+                padding: 70px 0;
             }
             .course-grid {
                 grid-template-columns: 1fr;
@@ -814,7 +1267,7 @@
                 grid-template-columns: 1fr 1fr;
             }
             .cta-box {
-                padding: 35px 25px;
+                padding: 38px 25px;
                 flex-direction: column;
                 align-items: flex-start;
             }
@@ -830,21 +1283,43 @@
             }
         }
         
-        @media (max-width: 400px) {
+        @media (max-width: 430px) {
             .hero h1 {
-                font-size: 34px;
-            }
-            .process-grid {
-                grid-template-columns: 1fr;
-            }
-            .stats-card {
-                grid-template-columns: 1fr;
+                font-size: 35px;
             }
             .hero-card {
                 padding: 20px;
             }
             .code {
-                font-size: 12px;
+                font-size: 11px;
+            }
+            .stats-card {
+                grid-template-columns: 1fr;
+            }
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-heading {
+                margin-bottom: 40px;
+            }
+            .toast {
+                left: 15px;
+                right: 15px;
+                text-align: center;
+            }
+        }
+        /* =====================================
+           REDUCED MOTION
+        ===================================== */
+        
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
             }
         }
     </style>
@@ -852,40 +1327,63 @@
 </head>
 
 <body>
-    <!-- =========================
-     NAVBAR
-========================== -->
+
+    <div class="cursor-glow"></div>
+
+    <!-- =====================================
+         NAVBAR
+    ===================================== -->
 
     <header class="navbar">
+
         <div class="container nav-inner">
 
             <a href="#home" class="logo">
-            Inspanner<span>Academy</span>
-        </a>
+                Inspanner<span>Academy</span>
+            </a>
+
+            <button class="menu-toggle" aria-label="Open menu">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
 
             <nav class="nav-links">
+
                 <a href="#home">Home</a>
+
                 <a href="#courses">Courses</a>
+
                 <a href="#about">Why Us</a>
+
                 <a href="#process">Training</a>
+
                 <a href="#contact">Contact</a>
-                <a href="#contact" class="nav-btn">Enquire Now</a>
+
+                <a href="#contact" class="nav-btn">
+                    Enquire Now
+                </a>
+
             </nav>
 
         </div>
+
     </header>
 
-    <!-- =========================
-     HERO
-========================== -->
 
     <main id="home">
+
+        <!-- =====================================
+             HERO
+        ===================================== -->
 
         <section class="hero">
 
             <div class="container hero-grid">
 
-                <div>
+                <div class="reveal">
 
                     <div class="badge">
                         Industry-Focused Software Training
@@ -896,77 +1394,132 @@
                     </h1>
 
                     <p class="hero-text">
-                        Master Python, Java and Data Analytics with practical, career-focused training at Inspanner Academy. Learn from fundamentals to real-world projects and become ready for the software industry.
+
+                        Master
+                        <span class="typing" id="typing"></span> with practical, career-focused training at Inspanner Academy. Learn from fundamentals to real-world projects and become ready for the software industry.
+
                     </p>
 
                     <div class="hero-buttons">
+
                         <a href="#courses" class="btn btn-primary">
-                        Explore Courses →
-                    </a>
+                            Explore Courses →
+                        </a>
 
                         <a href="#contact" class="btn btn-outline">
-                        Talk to Us
-                    </a>
+                            Talk to Us
+                        </a>
+
                     </div>
 
                 </div>
 
-                <div class="hero-card">
+
+                <!-- CODE CARD -->
+
+                <div class="hero-card reveal" id="tiltCard">
 
                     <div class="window-top">
+
                         <span></span>
                         <span></span>
                         <span></span>
+
                     </div>
 
                     <div class="code">
-                        <div>
+
+                        <div class="code-line">
+
                             <span class="purple">class</span>
                             <span class="blue">Developer</span>:
+
                         </div>
 
-                        <div>&nbsp;&nbsp;<span class="purple">skills</span> = [</div>
+                        <div class="code-line">
 
-                        <div>
+                            &nbsp;&nbsp;<span class="purple">skills</span> = [
+
+                        </div>
+
+                        <div class="code-line">
+
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="green">"Python"</span>,
+
                         </div>
 
-                        <div>
+                        <div class="code-line">
+
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="green">"Java"</span>,
+
                         </div>
 
-                        <div>
+                        <div class="code-line">
+
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="green">"Data Analytics"</span>
+
                         </div>
 
-                        <div>&nbsp;&nbsp;]</div>
+                        <div class="code-line">
 
-                        <div>&nbsp;</div>
+                            &nbsp;&nbsp;]
 
-                        <div>
-                            &nbsp;&nbsp;<span class="purple">return</span>
+                        </div>
+
+                        <div class="code-line">
+                            &nbsp;
+                        </div>
+
+                        <div class="code-line">
+
+                            &nbsp;&nbsp;
+                            <span class="purple">return</span>
                             <span class="yellow">career_ready</span>
+
                         </div>
+
                     </div>
+
 
                     <div class="stats-card">
 
                         <div class="stat">
-                            <strong>3+</strong>
-                            <small>Core Courses</small>
+
+                            <strong class="counter" data-target="3">
+                                0
+                            </strong>
+
+                            <small>
+                                Core Courses
+                            </small>
+
                         </div>
 
                         <div class="stat">
-                            <strong>100%</strong>
-                            <small>Practical Learning</small>
+
+                            <strong>
+                                100%
+                            </strong>
+
+                            <small>
+                                Practical Learning
+                            </small>
+
                         </div>
 
                         <div class="stat">
-                            <strong>1:1</strong>
-                            <small>Guidance</small>
+
+                            <strong>
+                                1:1
+                            </strong>
+
+                            <small>
+                                Guidance
+                            </small>
+
                         </div>
 
                     </div>
@@ -977,44 +1530,69 @@
 
         </section>
 
-        <!-- =========================
-         TRUST
-    ========================== -->
+
+        <!-- =====================================
+             TRUST
+        ===================================== -->
 
         <div class="trust">
 
             <div class="container trust-inner">
 
-                <div class="trust-item">
-                    <strong>Practical Training</strong>
-                    <span>Learn by building real projects</span>
+                <div class="trust-item reveal">
+
+                    <strong>
+                        Practical Training
+                    </strong>
+
+                    <span>
+                        Learn by building real projects
+                    </span>
+
                 </div>
 
-                <div class="trust-item">
-                    <strong>Industry Skills</strong>
-                    <span>Focus on skills companies need</span>
+                <div class="trust-item reveal">
+
+                    <strong>
+                        Industry Skills
+                    </strong>
+
+                    <span>
+                        Focus on skills companies need
+                    </span>
+
                 </div>
 
-                <div class="trust-item">
-                    <strong>Career Guidance</strong>
-                    <span>Support throughout your learning journey</span>
+                <div class="trust-item reveal">
+
+                    <strong>
+                        Career Guidance
+                    </strong>
+
+                    <span>
+                        Support throughout your learning journey
+                    </span>
+
                 </div>
 
             </div>
 
         </div>
 
-        <!-- =========================
-         COURSES
-    ========================== -->
+
+        <!-- =====================================
+             COURSES
+        ===================================== -->
 
         <section class="courses" id="courses">
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <div class="label">Our Courses</div>
+                    <div class="label">
+                        Our Courses
+                    </div>
 
                     <h2>
                         Build In-Demand Software Skills
@@ -1026,73 +1604,109 @@
 
                 </div>
 
+
                 <div class="course-grid">
 
-                    <!-- Python -->
+                    <!-- PYTHON -->
 
-                    <article class="course-card">
+                    <article class="course-card reveal">
 
-                        <div class="course-icon">🐍</div>
+                        <div class="course-icon">
+                            🐍
+                        </div>
 
-                        <h3>Python Programming</h3>
+                        <h3>
+                            Python Programming
+                        </h3>
 
                         <p>
                             Learn Python from basics to advanced concepts and develop strong programming fundamentals.
                         </p>
 
                         <ul class="course-list">
+
                             <li>Python Fundamentals</li>
+
                             <li>Object-Oriented Programming</li>
+
                             <li>Functions & Modules</li>
+
                             <li>File Handling</li>
+
                             <li>Exception Handling</li>
+
                             <li>Real-World Projects</li>
+
                         </ul>
 
                     </article>
 
-                    <!-- Java -->
 
-                    <article class="course-card">
+                    <!-- JAVA -->
 
-                        <div class="course-icon">☕</div>
+                    <article class="course-card reveal">
 
-                        <h3>Java Programming</h3>
+                        <div class="course-icon">
+                            ☕
+                        </div>
+
+                        <h3>
+                            Java Programming
+                        </h3>
 
                         <p>
                             Build a strong foundation in Java and learn object-oriented programming and application development.
                         </p>
 
                         <ul class="course-list">
+
                             <li>Core Java</li>
+
                             <li>OOP Concepts</li>
+
                             <li>Collections Framework</li>
+
                             <li>Exception Handling</li>
+
                             <li>JDBC & Database Connectivity</li>
+
                             <li>Practical Projects</li>
+
                         </ul>
 
                     </article>
 
-                    <!-- Data Analytics -->
 
-                    <article class="course-card">
+                    <!-- DATA -->
 
-                        <div class="course-icon">📊</div>
+                    <article class="course-card reveal">
 
-                        <h3>Data Analytics</h3>
+                        <div class="course-icon">
+                            📊
+                        </div>
+
+                        <h3>
+                            Data Analytics
+                        </h3>
 
                         <p>
                             Learn how to transform raw data into meaningful insights using modern data analytics tools.
                         </p>
 
                         <ul class="course-list">
+
                             <li>Excel & Data Preparation</li>
+
                             <li>Python for Data Analytics</li>
+
                             <li>NumPy & Pandas</li>
+
                             <li>Data Visualization</li>
+
                             <li>SQL & Databases</li>
+
                             <li>Analytics Projects</li>
+
                         </ul>
 
                     </article>
@@ -1103,17 +1717,20 @@
 
         </section>
 
-        <!-- =========================
-         WHY CHOOSE US
-    ========================== -->
+
+        <!-- =====================================
+             WHY US
+        ===================================== -->
 
         <section id="about">
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <div class="label">Why Inspanner Academy</div>
+                    <div class="label">
+                        Why Inspanner Academy
+                    </div>
 
                     <h2>
                         Learn More Than Just Theory
@@ -1125,38 +1742,74 @@
 
                 </div>
 
+
                 <div class="why-grid">
 
-                    <div class="why-card">
-                        <div class="why-number">01</div>
-                        <h3>Practical Learning</h3>
+                    <div class="why-card reveal">
+
+                        <div class="why-number">
+                            01
+                        </div>
+
+                        <h3>
+                            Practical Learning
+                        </h3>
+
                         <p>
                             Learn concepts by applying them to practical exercises and projects instead of relying only on theoretical lessons.
                         </p>
+
                     </div>
 
-                    <div class="why-card">
-                        <div class="why-number">02</div>
-                        <h3>Industry-Oriented Curriculum</h3>
+
+                    <div class="why-card reveal">
+
+                        <div class="why-number">
+                            02
+                        </div>
+
+                        <h3>
+                            Industry-Oriented Curriculum
+                        </h3>
+
                         <p>
                             Course content is designed around programming, database and analytical skills used in software roles.
                         </p>
+
                     </div>
 
-                    <div class="why-card">
-                        <div class="why-number">03</div>
-                        <h3>Project-Based Training</h3>
+
+                    <div class="why-card reveal">
+
+                        <div class="why-number">
+                            03
+                        </div>
+
+                        <h3>
+                            Project-Based Training
+                        </h3>
+
                         <p>
                             Build projects that help you understand how software and data solutions are developed in practice.
                         </p>
+
                     </div>
 
-                    <div class="why-card">
-                        <div class="why-number">04</div>
-                        <h3>Career Guidance</h3>
+
+                    <div class="why-card reveal">
+
+                        <div class="why-number">
+                            04
+                        </div>
+
+                        <h3>
+                            Career Guidance
+                        </h3>
+
                         <p>
                             Get guidance on resumes, interview preparation, technical skills and your overall career direction.
                         </p>
+
                     </div>
 
                 </div>
@@ -1165,17 +1818,20 @@
 
         </section>
 
-        <!-- =========================
-         TRAINING PROCESS
-    ========================== -->
+
+        <!-- =====================================
+             PROCESS
+        ===================================== -->
 
         <section class="process" id="process">
 
             <div class="container">
 
-                <div class="section-heading">
+                <div class="section-heading reveal">
 
-                    <div class="label">Our Approach</div>
+                    <div class="label">
+                        Our Approach
+                    </div>
 
                     <h2>
                         A Simple Path to Skill Development
@@ -1187,13 +1843,18 @@
 
                 </div>
 
+
                 <div class="process-grid">
 
-                    <div class="process-card">
+                    <div class="process-card reveal">
 
-                        <div class="process-icon">01</div>
+                        <div class="process-icon">
+                            01
+                        </div>
 
-                        <h3>Learn</h3>
+                        <h3>
+                            Learn
+                        </h3>
 
                         <p>
                             Understand the fundamentals and core concepts.
@@ -1201,11 +1862,16 @@
 
                     </div>
 
-                    <div class="process-card">
 
-                        <div class="process-icon">02</div>
+                    <div class="process-card reveal">
 
-                        <h3>Practice</h3>
+                        <div class="process-icon">
+                            02
+                        </div>
+
+                        <h3>
+                            Practice
+                        </h3>
 
                         <p>
                             Strengthen your skills through coding and exercises.
@@ -1213,11 +1879,16 @@
 
                     </div>
 
-                    <div class="process-card">
 
-                        <div class="process-icon">03</div>
+                    <div class="process-card reveal">
 
-                        <h3>Build</h3>
+                        <div class="process-icon">
+                            03
+                        </div>
+
+                        <h3>
+                            Build
+                        </h3>
 
                         <p>
                             Apply your knowledge through real-world projects.
@@ -1225,11 +1896,16 @@
 
                     </div>
 
-                    <div class="process-card">
 
-                        <div class="process-icon">04</div>
+                    <div class="process-card reveal">
 
-                        <h3>Prepare</h3>
+                        <div class="process-icon">
+                            04
+                        </div>
+
+                        <h3>
+                            Prepare
+                        </h3>
 
                         <p>
                             Get ready for interviews and software careers.
@@ -1243,27 +1919,32 @@
 
         </section>
 
-        <!-- =========================
-         CTA
-    ========================== -->
+
+        <!-- =====================================
+             CTA
+        ===================================== -->
 
         <section class="cta">
 
             <div class="container">
 
-                <div class="cta-box">
+                <div class="cta-box reveal">
 
                     <div>
-                        <h2>Ready to start learning?</h2>
+
+                        <h2>
+                            Ready to start learning?
+                        </h2>
 
                         <p>
                             Talk to Inspanner Academy and find the right course for your career goals.
                         </p>
+
                     </div>
 
                     <a href="#contact" class="btn">
-                    Enquire Now →
-                </a>
+                        Enquire Now →
+                    </a>
 
                 </div>
 
@@ -1271,185 +1952,223 @@
 
         </section>
 
-        <!-- =========================
-         CONTACT
-    ========================== -->
+
+        <!-- =====================================
+             CONTACT
+        ===================================== -->
 
         <section id="contact">
 
             <div class="container contact-grid">
 
-                <div class="contact-info">
+                <div class="contact-info reveal">
 
-                    <h2>Let's Talk</h2>
+                    <h2>
+                        Let's Talk
+                    </h2>
 
                     <p>
                         Have questions about our courses, batches or training? Get in touch with Inspanner Academy.
                     </p>
 
-                    <!-- Phone -->
 
                     <div class="contact-item">
 
-                        <div class="contact-icon">☎</div>
+                        <div class="contact-icon">
+                            ☎
+                        </div>
 
                         <div>
-                            <strong>Phone</strong>
 
-                            <a href="tel:+91791763298373">
-                            +91 789172910
-                        </a>
+                            <strong>
+                                Phone
+                            </strong>
+
+                            <a href="tel:+917799886500">
+                                +91 7799886500
+                            </a>
+
                         </div>
 
                     </div>
 
-                    <!-- Email -->
 
                     <div class="contact-item">
 
-                        <div class="contact-icon">✉</div>
+                        <div class="contact-icon">
+                            ✉
+                        </div>
 
                         <div>
-                            <strong>Email</strong>
+
+                            <strong>
+                                Email
+                            </strong>
 
                             <a href="mailto:info@inspanneracademy.com">
-                            info@inspanneracademy.com
-                        </a>
+                                info@inspanneracademy.com
+                            </a>
+
                         </div>
 
                     </div>
 
-                    <!-- WhatsApp -->
 
                     <div class="contact-item">
 
-                        <div class="contact-icon">💬</div>
+                        <div class="contact-icon">
+                            💬
+                        </div>
 
                         <div>
-                            <strong>WhatsApp</strong>
 
-                            <a href="https://wa.me/910000000000" target="_blank" rel="noopener">
-                            Chat with us on WhatsApp
-                        </a>
+                            <strong>
+                                WhatsApp
+                            </strong>
+
+                            <a href="https://wa.me/917799886500" target="_blank" rel="noopener">
+                                Chat with us on WhatsApp
+                            </a>
+
                         </div>
 
                     </div>
 
-                    <!-- Address -->
 
                     <div class="contact-item">
 
-                        <div class="contact-icon">📍</div>
+                        <div class="contact-icon">
+                            📍
+                        </div>
 
                         <div>
-                            <strong>Address</strong>
+
+                            <strong>
+                                Address
+                            </strong>
 
                             <span>
-                            Your Academy Address,<br>
-                            Your City, Telangana, India
-                        </span>
+                                Hyderabad,<br>
+                                Telangana, India
+                            </span>
+
                         </div>
 
                     </div>
 
-                    <!-- Working Hours -->
 
                     <div class="contact-item">
 
-                        <div class="contact-icon">⏰</div>
+                        <div class="contact-icon">
+                            ⏰
+                        </div>
 
                         <div>
-                            <strong>Working Hours</strong>
+
+                            <strong>
+                                Working Hours
+                            </strong>
 
                             <span>
-                            Monday – Saturday<br>
-                            9:00 AM – 7:00 PM
-                        </span>
+                                Monday – Saturday<br>
+                                9:00 AM – 7:00 PM
+                            </span>
+
                         </div>
 
                     </div>
 
                 </div>
 
-                <!-- Enquiry Form -->
 
-                <div class="contact-form">
+                <!-- FORM -->
 
-                    <h3>Send an Enquiry</h3>
+                <div class="contact-form reveal">
 
-                    <form action="mailto:info@inspanneracademy.com" method="post" enctype="text/plain">
+                    <h3>
+                        Send an Enquiry
+                    </h3>
+
+                    <form id="enquiryForm">
 
                         <div class="form-group">
 
                             <label for="name">
-                            Full Name
-                        </label>
+                                Full Name
+                            </label>
 
-                            <input type="text" id="name" name="Name" placeholder="Enter your name" required>
+                            <input type="text" id="name" placeholder="Enter your name" required>
 
                         </div>
+
 
                         <div class="form-group">
 
                             <label for="phone">
-                            Phone Number
-                        </label>
+                                Phone Number
+                            </label>
 
-                            <input type="tel" id="phone" name="Phone" placeholder="Enter your phone number" required>
+                            <input type="tel" id="phone" placeholder="Enter your phone number" required>
 
                         </div>
+
 
                         <div class="form-group">
 
                             <label for="email">
-                            Email Address
-                        </label>
+                                Email Address
+                            </label>
 
-                            <input type="email" id="email" name="Email" placeholder="Enter your email">
+                            <input type="email" id="email" placeholder="Enter your email">
 
                         </div>
+
 
                         <div class="form-group">
 
                             <label for="course">
-                            Interested Course
-                        </label>
+                                Interested Course
+                            </label>
 
-                            <select id="course" name="Course">
+                            <select id="course">
 
-                            <option value="">
-                                Select a course
-                            </option>
+                                <option value="">
+                                    Select a course
+                                </option>
 
-                            <option value="Python">
-                                Python Programming
-                            </option>
+                                <option>
+                                    Python Programming
+                                </option>
 
-                            <option value="Java">
-                                Java Programming
-                            </option>
+                                <option>
+                                    Java Programming
+                                </option>
 
-                            <option value="Data Analytics">
-                                Data Analytics
-                            </option>
+                                <option>
+                                    Data Analytics
+                                </option>
 
-                        </select>
+                            </select>
 
                         </div>
+
 
                         <div class="form-group">
 
                             <label for="message">
-                            Message
-                        </label>
+                                Message
+                            </label>
 
-                            <textarea id="message" name="Message" placeholder="Tell us how we can help..."></textarea>
+                            <textarea id="message" placeholder="Tell us how we can help..."></textarea>
 
                         </div>
 
+
                         <button type="submit" class="btn btn-primary submit-btn">
-                        Send Enquiry →
-                    </button>
+
+                            Send Enquiry →
+
+                        </button>
 
                     </form>
 
@@ -1461,9 +2180,10 @@
 
     </main>
 
-    <!-- =========================
-     FOOTER
-========================== -->
+
+    <!-- =====================================
+         FOOTER
+    ===================================== -->
 
     <footer>
 
@@ -1483,51 +2203,532 @@
 
                 </div>
 
+
                 <div>
 
-                    <h4>Courses</h4>
+                    <h4>
+                        Courses
+                    </h4>
 
                     <ul class="footer-links">
-                        <li><a href="#courses">Python Programming</a></li>
-                        <li><a href="#courses">Java Programming</a></li>
-                        <li><a href="#courses">Data Analytics</a></li>
+
+                        <li>
+                            <a href="#courses">
+                                Python Programming
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#courses">
+                                Java Programming
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#courses">
+                                Data Analytics
+                            </a>
+                        </li>
+
                     </ul>
 
                 </div>
 
+
                 <div>
 
-                    <h4>Contact</h4>
+                    <h4>
+                        Contact
+                    </h4>
 
                     <ul class="footer-links">
+
                         <li>
                             <a href="tel:+917799886500">
-                            +91 7799886500
-                        </a>
+                                +91 7799886500
+                            </a>
                         </li>
 
                         <li>
                             <a href="mailto:info@inspanneracademy.com">
-                            info@inspanneracademy.com
-                        </a>
+                                info@inspanneracademy.com
+                            </a>
                         </li>
 
                         <li>
                             Hyderabad, Telangana
                         </li>
+
                     </ul>
 
                 </div>
 
             </div>
 
+
             <div class="copyright">
+
                 © 2026 Inspanner Academy. All Rights Reserved.
+
             </div>
 
         </div>
 
     </footer>
+
+
+    <!-- BACK TO TOP -->
+
+    <button class="back-top" id="backTop" aria-label="Back to top">
+
+        ↑
+
+    </button>
+
+
+    <!-- TOAST -->
+
+    <div class="toast" id="toast">
+
+        Thank you! We'll contact you soon.
+
+    </div>
+
+
+    <script>
+        /* =====================================
+                   MOBILE MENU
+                ===================================== */
+
+        const menuToggle =
+            document.querySelector(".menu-toggle");
+
+        const navLinks =
+            document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+
+            navLinks.classList.toggle("open");
+
+        });
+
+
+        document
+            .querySelectorAll(".nav-links a")
+            .forEach(link => {
+
+                link.addEventListener("click", () => {
+
+                    navLinks.classList.remove("open");
+
+                });
+
+            });
+
+
+        /* =====================================
+           NAVBAR SHADOW
+        ===================================== */
+
+        const navbar =
+            document.querySelector(".navbar");
+
+        window.addEventListener("scroll", () => {
+
+            if (window.scrollY > 20) {
+
+                navbar.classList.add("scrolled");
+
+            } else {
+
+                navbar.classList.remove("scrolled");
+
+            }
+
+        });
+
+
+        /* =====================================
+           TYPING EFFECT
+        ===================================== */
+
+        const typing =
+            document.getElementById("typing");
+
+        const words = [
+            "Python",
+            "Java",
+            "Data Analytics"
+        ];
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+
+        function typeEffect() {
+
+            const word = words[wordIndex];
+
+            if (!deleting) {
+
+                typing.textContent =
+                    word.substring(0, charIndex + 1);
+
+                charIndex++;
+
+                if (charIndex === word.length) {
+
+                    deleting = true;
+
+                    setTimeout(typeEffect, 1500);
+
+                    return;
+
+                }
+
+            } else {
+
+                typing.textContent =
+                    word.substring(0, charIndex - 1);
+
+                charIndex--;
+
+                if (charIndex === 0) {
+
+                    deleting = false;
+
+                    wordIndex =
+                        (wordIndex + 1) % words.length;
+
+                }
+
+            }
+
+            setTimeout(
+                typeEffect,
+                deleting ? 55 : 90
+            );
+
+        }
+
+        typeEffect();
+
+
+        /* =====================================
+           SCROLL REVEAL
+        ===================================== */
+
+        const revealElements =
+            document.querySelectorAll(".reveal");
+
+
+        const revealObserver =
+            new IntersectionObserver(
+
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            entry.target
+                                .classList
+                                .add("active");
+
+                            revealObserver
+                                .unobserve(entry.target);
+
+                        }
+
+                    });
+
+                },
+
+                {
+                    threshold: .12
+                }
+
+            );
+
+
+        revealElements.forEach(element => {
+
+            revealObserver.observe(element);
+
+        });
+
+
+        /* =====================================
+           COUNTER
+        ===================================== */
+
+        const counter =
+            document.querySelector(".counter");
+
+        let counterStarted = false;
+
+
+        const counterObserver =
+            new IntersectionObserver(
+
+                entries => {
+
+                    if (
+                        entries[0].isIntersecting &&
+                        !counterStarted
+                    ) {
+
+                        counterStarted = true;
+
+                        const target = +counter.dataset.target;
+
+                        let current = 0;
+
+                        const updateCounter = () => {
+
+                            if (current < target) {
+
+                                current++;
+
+                                counter.textContent =
+                                    current + "+";
+
+                                setTimeout(
+                                    updateCounter,
+                                    250
+                                );
+
+                            }
+
+                        };
+
+                        updateCounter();
+
+                    }
+
+                }
+
+            );
+
+
+        counterObserver.observe(counter);
+
+
+        /* =====================================
+           3D HERO CARD
+        ===================================== */
+
+        const tiltCard =
+            document.getElementById("tiltCard");
+
+
+        if (window.innerWidth > 800) {
+
+            tiltCard.addEventListener(
+                "mousemove",
+                event => {
+
+                    const rect =
+                        tiltCard.getBoundingClientRect();
+
+                    const x =
+                        event.clientX - rect.left;
+
+                    const y =
+                        event.clientY - rect.top;
+
+                    const rotateX =
+                        ((y / rect.height) - .5) * -8;
+
+                    const rotateY =
+                        ((x / rect.width) - .5) * 8;
+
+                    tiltCard.style.transform =
+                        `perspective(900px)
+                         rotateX(${rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         translateY(-4px)`;
+
+                }
+            );
+
+
+            tiltCard.addEventListener(
+                "mouseleave",
+                () => {
+
+                    tiltCard.style.transform =
+                        "perspective(900px) rotateX(0) rotateY(0)";
+
+                }
+            );
+
+        }
+
+
+        /* =====================================
+           CURSOR GLOW
+        ===================================== */
+
+        const cursorGlow =
+            document.querySelector(".cursor-glow");
+
+
+        document.addEventListener(
+            "mousemove",
+            event => {
+
+                cursorGlow.style.left =
+                    event.clientX + "px";
+
+                cursorGlow.style.top =
+                    event.clientY + "px";
+
+            }
+        );
+
+
+        /* =====================================
+           BACK TO TOP
+        ===================================== */
+
+        const backTop =
+            document.getElementById("backTop");
+
+
+        window.addEventListener("scroll", () => {
+
+            if (window.scrollY > 500) {
+
+                backTop.classList.add("show");
+
+            } else {
+
+                backTop.classList.remove("show");
+
+            }
+
+        });
+
+
+        backTop.addEventListener(
+            "click",
+            () => {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }
+        );
+
+
+        /* =====================================
+           FORM INTERACTION
+        ===================================== */
+
+        const form =
+            document.getElementById("enquiryForm");
+
+        const toast =
+            document.getElementById("toast");
+
+
+        form.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                const button =
+                    form.querySelector("button");
+
+                button.textContent =
+                    "Sending...";
+
+                button.disabled = true;
+
+
+                setTimeout(() => {
+
+                    button.textContent =
+                        "Enquiry Sent ✓";
+
+                    toast.classList.add("show");
+
+                    form.reset();
+
+
+                    setTimeout(() => {
+
+                        toast.classList.remove("show");
+
+                        button.textContent =
+                            "Send Enquiry →";
+
+                        button.disabled = false;
+
+                    }, 3000);
+
+                }, 900);
+
+            }
+        );
+
+
+        /* =====================================
+           CARD MOUSE EFFECT
+        ===================================== */
+
+        document
+            .querySelectorAll(".course-card")
+            .forEach(card => {
+
+                card.addEventListener(
+                    "mousemove",
+                    event => {
+
+                        if (window.innerWidth < 800)
+                            return;
+
+                        const rect =
+                            card.getBoundingClientRect();
+
+                        const x =
+                            event.clientX - rect.left;
+
+                        const y =
+                            event.clientY - rect.top;
+
+                        const rotateY =
+                            ((x / rect.width) - .5) * 4;
+
+                        const rotateX =
+                            ((y / rect.height) - .5) * -4;
+
+                        card.style.transform =
+                            `perspective(700px)
+                             rotateX(${rotateX}deg)
+                             rotateY(${rotateY}deg)
+                             translateY(-8px)`;
+
+                    }
+                );
+
+
+                card.addEventListener(
+                    "mouseleave",
+                    () => {
+
+                        card.style.transform = "";
+
+                    }
+                );
+
+            });
+    </script>
 
 </body>
 
